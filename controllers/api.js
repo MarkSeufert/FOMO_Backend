@@ -11,7 +11,7 @@ router.get('/cats', (req, res) => {
     res.send('MEOW');
 });
 
-router.get('/commment', (req, res) => {
+router.get('/comment', (req, res) => {
     console.log(123)
     let comment = commentController.getComment(1);
     res.send(comment);
