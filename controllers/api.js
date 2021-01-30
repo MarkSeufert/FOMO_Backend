@@ -11,15 +11,24 @@ router.get('/cats', (req, res) => {
     res.send('MEOW');
 });
 
-router.get('/comment', (req, res) => {
+router.get('/comment', async (req, res) => {
     console.log(123)
-    let comment = commentController.getComment(1);
+    let comment = await commentController.getComment(1);
     res.send(comment);
 });
 
-router.get('/people', (req, res) => {
-    let user = userController.getUserInformation(1);
+router.get('/people', async (req, res) => {
+    let user = await userController.getUserInformation(1);
     res.send(user);
+});
+
+router.post('/newPeople', (req, res) => {
+    if (req.body) {
+        let user = userController.createUser({name: req.body.name});
+        res.send(user);
+    } else {
+        res.send("Need to have a name");
+    }
 });
 
 
