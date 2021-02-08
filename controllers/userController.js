@@ -1,24 +1,28 @@
 'use strict'
 
 const userModel = require('../models/user.js');
+var Promise = require("bluebird");
 
 const user1 = {
     name: "stefan",
     age: "12"
 };
 
-async function getUserInformation(userId) {
-    return userModel.find({}, async (err, users) => {
+function getUserInformation(userId) {
+    return userModel.find({}).then((err, users) => {
         console.log(users);
-        return users;
-    });
+        return users || "No users";
+    })
 }
 
 function createUser(name) {
     let newUser = new userModel(name);
-    newUser.save((err) => {
-        console.log("err: ", err);
+    return newUser.save().then(() => {
+        return {
+            name: name
+        }
     });
+
 }
 
 module.exports = {
