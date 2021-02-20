@@ -5,7 +5,11 @@ const Schema   = mongoose.Schema;
 
 const User = mongoose.model('User', Schema({
     name: String,
-    email: String
+    email: String,
+    date: {
+        type: Date,
+        default: Date.now
+    }
 }));
 
 module.exports = User

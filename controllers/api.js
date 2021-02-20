@@ -20,19 +20,15 @@ router.get('/comment', (req, res) => {
 });
 
 router.get('/people', (req, res) => {
-    userController.getUserInformation(1).then((user) => {
+    userController.getUser(req.body).then((user) => {
         res.send(user);
     })
 });
 
 router.post('/newPeople', (req, res) => {
-    if (req.body) {
-        userController.createUser({name: req.body.name}).then((user) => {
-            res.send(user);
-        });
-    } else {
-        res.send("Need to have a name");
-    }
+    userController.createUser(req.body).then((user) => {
+        res.send(user);
+    });
 });
 
 
