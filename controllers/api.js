@@ -25,6 +25,12 @@ router.get('/people', (req, res) => {
     })
 });
 
+router.post('/comment', (req, res) => {
+    commentController.comment(req.body).then((comment) => {
+        res.send(comment);
+    })
+});
+
 router.post('/newPeople', (req, res) => {
     userController.createUser(req.body).then((user) => {
         res.send(user);
