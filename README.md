@@ -5,6 +5,7 @@ POST comment example body:
 {
     "username": "hihihi",
     "email": "hi@ih.hih",
+    "comment": "this is a comment",
     "id": "my_id",
     "long": 30.5,
     "lat": 50.8

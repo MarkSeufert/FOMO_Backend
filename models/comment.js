@@ -19,6 +19,7 @@ const Comment = mongoose.model('Comment', Schema({
     name: String,
     email: String,
     userId: String,
+    comment: String,
     location: pointSchema,
     date: {
         type: Date,

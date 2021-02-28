@@ -13,6 +13,7 @@ function comment(commentData) {
         {
             name: commentData.username,
             email: commentData.email,
+            comment: commentData.comment,
             userId: commentData.id,
             location: {
                 type: 'Point',
