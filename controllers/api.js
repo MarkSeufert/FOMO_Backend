@@ -25,6 +25,12 @@ router.get('/people', (req, res) => {
     })
 });
 
+router.get('/comments', (req, res) => {
+    commentController.getComments(req.body).then((comment) => {
+        res.send(comment);
+    })
+});
+
 router.post('/comment', (req, res) => {
     commentController.comment(req.body).then((comment) => {
         res.send(comment);

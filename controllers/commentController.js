@@ -11,14 +11,32 @@ function comment(commentData) {
     // let newComment = new commentModel(commentData);
     let newComment = new commentModel(
         {
-            name: "String1",
-            email: "String2",
-            userId: "String3",
-            x_coord: 123,
-            y_coord: 456,
+            name: commentData.username,
+            email: commentData.email,
+            userId: commentData.id,
+            location: {
+                type: 'Point',
+                coordinates: [ commentData.long, commentData.lat ]
+              }
         }
     );
     return newComment.save();
+}
+
+function getComments(locationData){
+    let abc = commentModel.find(
+        {
+          location:
+            { $near :
+               {
+                 $geometry: { type: "Point",  coordinates: [ locationData.long, locationData.lat ] },
+                 $minDistance: 0,
+                 $maxDistance: locationData.radius //in meters
+               }
+            }
+        }
+    );
+    return abc;
 }
 
 function getComment(commentId) {
@@ -29,5 +47,6 @@ function getComment(commentId) {
 
 module.exports = {
     comment,
+    getComments,
     getComment
 };
