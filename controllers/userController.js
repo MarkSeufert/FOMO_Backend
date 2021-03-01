@@ -1,12 +1,7 @@
 'use strict'
 
 const userModel = require('../models/user.js');
-var Promise = require("bluebird");
-
-const user1 = {
-    name: "stefan",
-    age: "12"
-};
+const Promise = require("bluebird");
 
 // Returns a user given their 'userId' or 'email'
 async function getUser(userData) {
@@ -39,7 +34,6 @@ async function getUser(userData) {
         return user;
     }
     return userModel.find({}).then((err, users) => {
-        console.log(users);
         return users || "No users";
     })
 }
