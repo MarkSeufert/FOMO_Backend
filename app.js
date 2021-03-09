@@ -9,12 +9,32 @@ const bodyParser = require('body-parser')
 const apiRouter = require('./controllers/api.js');
 const db = require('./models/db.js');
 
+var multer = require('multer');
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'uploads')
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.fieldname + '-' + Date.now())
+    }
+  })
+   
+var upload = multer({ storage: storage, dest: "/tmp/files/" })
+
 // Middleware goes here
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
-// parse application/json
-app.use(bodyParser.json())
+// app.use(bodyParser.urlencoded({ extended: false }))
+// app.use(express.bodyParser());
+// app.use(bodyParser.urlencoded({ extended: true }));
+// // parse application/json
+// app.use(bodyParser.json())
+
+app.use(express.json()); 
+app.use(express.urlencoded({ extended: true })); 
+// app.use(upload.array()); 
+// app.use(multer().any());
+app.use(express.static('public'));
 
 app.use('/', (req, res, next) => {
     console.log(`user accessing ${req.path}`);
@@ -23,7 +43,7 @@ app.use('/', (req, res, next) => {
 
 // The API endpoints are hit here
 
-app.use('/api', apiRouter);
+app.use('/api', upload.single('a'), apiRouter);
 
 app.get('/', (req, res) => res.send('Hello World!'));
 

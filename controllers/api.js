@@ -7,6 +7,20 @@ const userController = require('./userController')
 const commentController = require('./commentController')
 var Promise = require("bluebird");
 
+var multer = require('multer');
+const path = require('path');
+var fs = require('fs');
+
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'uploads')
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.fieldname + '-' + Date.now())
+    }
+  })
+   
+var upload = multer({ storage: storage, dest: "/tmp/files/" })
 
 router.get('/cats', (req, res) => {
     res.send('MEOW');
@@ -31,8 +45,17 @@ router.get('/comments', (req, res) => {
     })
 });
 
-router.post('/comment', (req, res) => {
-    commentController.comment(req.body).then((comment) => {
+router.post('/comment', upload.any(), (req, res) => {
+    const file = req.file;
+    var obj = {
+        // name: req.body.name,
+        // desc: req.body.desc,
+        img: {
+            data: fs.readFileSync(path.resolve(__dirname, "../uploads/" + req.file.filename)),
+            contentType: 'image/png'
+        }
+    }
+    commentController.comment(req.query).then((comment) => {
         res.send(comment);
     })
 });
