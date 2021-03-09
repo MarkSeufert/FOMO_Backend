@@ -4,34 +4,43 @@ const userModel = require('../models/user.js');
 const Promise = require("bluebird");
 
 // Returns a user given their 'userId' or 'email'
-async function getUser(userData) {
+function getUser(userData) {
+    let error = "";
     // Check that the userData isn't empty
     if (!userData)
     {
-        return { error: "/people GET requires a body" };
+        error = "/people GET requires a body";
     }
 
     // The userData must have a userId or email to uniquely query the user
     if (!userData.userId && !userData.email)
     {
-        return { error: "/people GET requires a 'userId' or 'email' field" };
+        error = "/people GET requires a 'userId' or 'email' field";
+    }
+    if(error){
+        return new Promise((resolve, reject) => {
+            resolve(error);
+        });
     }
 
+    let user = 0;
     // Query based off userId
     if (userData.userId)
     {
-        const user = await userModel.findById(userData.userId);
-        if (!user)
-            return { error: "No user found with that userId" };
-        return user;
+        return userModel.findById(userData.userId).then((user) => {
+            if (!user)
+                return { error: "No user found with that userId" };
+            return user;
+        })
     }
 
     if (userData.email)
     {
-        const user = await userModel.findOne({email: userData.email});
-        if (!user)
-            return { error: "No user found with that email" };
-        return user;
+        return userModel.findOne({email: userData.email}).then((user) => {
+            if (!user)
+                return { error: "No user found with that email" };
+            return user;
+        })
     }
     return userModel.find({}).then((err, users) => {
         return users || "No users";
@@ -39,32 +48,39 @@ async function getUser(userData) {
 }
 
 // Creates a user in the mongoDB, requires a 'name' and 'email'
-async function createUser(userData) {
+function createUser(userData) {
+    let error = "";
     // Check that the request has a body
     if (!userData) 
     {
-        return { error: "/newPeople POST requires a body" };
+        error = "/newPeople POST requires a body";
     }
 
     // Check that the body has a name
     if (!userData.name)
     {
-        return { error: "/newPeople POST body requires 'name'" };
+        error = "/newPeople POST body requires 'name'";
     }
 
     // Check that the body has a unique email which isn't in MongoDB
     if (!userData.email)
     {
-        return { error: "/newPeople POST body requires 'email'" };
+        error = "/newPeople POST body requires 'email'";
     }
-    const user = await userModel.findOne({email: userData.email});
-    if (user)
-        return { error: "user already exists with that email" };
+    if(error){
+        return new Promise((resolve, reject) => {
+            resolve(error);
+        });
+    }
 
-    // Create the new user and save it to mongoDB
-    let newUser = new userModel(userData);
-    const returnedUser = await newUser.save();
-    return returnedUser;
+    return userModel.findOne({email: userData.email}).then((existingUser) => {
+        if (existingUser)
+            return { error: "user already exists with that email" };
+        
+        // Create the new user and save it to mongoDB
+        let newUser = new userModel(userData);
+        return newUser.save();
+    })
 }
 
 module.exports = {

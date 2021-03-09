@@ -11,7 +11,7 @@ function getPostComments(postId) {
 function addPostComment(postId) {
     // Create the new user and save it to mongoDB
     let newComment = new commentModel(postId);
-    const returnedComment = await newComment.save();
+    const returnedComment = newComment.save();
     return returnedComment;
 }
 

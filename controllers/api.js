@@ -40,13 +40,13 @@ router.post('/addComment', (req, res) => {
 
 router.get('/posts', (req, res) => {
     postController.getPosts(req.body).then((posts) => {
-        res.send(comment);
+        res.send(posts);
     })
 });
 
 router.post('/createPost', (req, res) => {
-    postController.createPost(req.body).then(() => {
-        res.send(comment);
+    postController.createPost(req.body).then((posts) => {
+        res.send(posts);
     })
 });
 
