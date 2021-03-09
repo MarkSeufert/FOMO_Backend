@@ -25,6 +25,7 @@ function createPost(postData) {
             email: postData.email,
             message: postData.message,
             userId: postData.id,
+            imageFile: postData.imageFile,
             location: {
                 type: 'Point',
                 coordinates: [ postData.long, postData.lat ]
@@ -37,6 +38,22 @@ function createPost(postData) {
     // let newPost = new postModel();
     // const returnedPost = await newPost.save();
     // return returnedPost;
+}
+
+function createPostWithImage(postData) {
+    let newPost = new postModel(
+        {
+            name: postData.username,
+            email: postData.email,
+            message: postData.message,
+            userId: postData.id,
+            location: {
+                type: 'Point',
+                coordinates: [ postData.long, postData.lat ]
+              }
+        }
+    );
+    return newPost.save();
 }
 
 module.exports = {
