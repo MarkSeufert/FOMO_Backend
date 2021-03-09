@@ -30,5 +30,5 @@ POST createUser example body:
 
 GET getUser example body:
 {
-    "email": "hi@ih.hih"
+    "email": "hi@gmail.com"
 }
