@@ -2,6 +2,9 @@
 
 const postModel = require('../models/post.js');
 
+var Filter = require('bad-words'),
+    filter = new Filter();
+
 function getPosts(locationData) {
     let posts = postModel.find(
         {
@@ -23,7 +26,7 @@ function createPost(postData) {
         {
             name: postData.username,
             email: postData.email,
-            message: postData.message,
+            message: filter.clean(postData.message),
             userId: postData.id,
             imageFile: postData.imageFile,
             location: {
