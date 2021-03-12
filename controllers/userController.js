@@ -1,6 +1,7 @@
 'use strict'
 
 const userModel = require('../models/user.js');
+
 const Promise = require("bluebird");
 
 // Returns a user given their 'userId' or 'email'
