@@ -24,7 +24,7 @@ var upload = multer({ storage: storage })
 // User Controller API
 
 router.get('/getUser', (req, res) => {
-    userController.getUser(req.body).then((user) => {
+    userController.getUser(req.query).then((user) => {
         res.send(user);
     })
 });
@@ -38,7 +38,7 @@ router.post('/createUser', (req, res) => {
 // Comment Controller API
 
 router.get('/comments', (req, res) => {
-    commentController.getPostComments(req.body).then((comment) => {
+    commentController.getPostComments(req.query).then((comment) => {
         res.send(comment);
     })
 });
@@ -52,7 +52,7 @@ router.post('/addComment', (req, res) => {
 // Post Controller API
 
 router.get('/posts', (req, res) => {
-    postController.getPosts(req.body).then((posts) => {
+    postController.getPosts(req.query).then((posts) => {
         res.send(posts);
     })
 });

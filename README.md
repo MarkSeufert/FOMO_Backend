@@ -22,14 +22,11 @@ Content-Type: application/json
 ------------------------------------------------------------------------------------------
 
 GET getUser<br />
-example endpoint: http://localhost:3000/api/getUser<br />
-example body:
-```json
-{
-    "email": "hi@gmail.com"
-}
+example endpoint: http://localhost:3000/api/getUser?email=hi@gmail.com<br />
+Query Params:
 ```
-Content-Type: application/json
+"email": "hi@gmail.com"
+```
 
 ------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------
@@ -75,15 +72,12 @@ Content-Type: multipart/form-data
 
 GET posts<br />
 example endpoint: http://localhost:3000/api/posts<br />
-example body:
-```json
-{
-    "radius": 50, // in meters
-    "long": 30.5,
-    "lat": 50.8
-}
+Query Params:
 ```
-Content-Type: application/json
+"radius": 50, // in meters
+"long": 30.5,
+"lat": 50.8
+```
 
 Returns: array of posts<br />
 Example return:
@@ -159,13 +153,10 @@ Content-Type: application/json
 
 GET comments<br />
 example endpoint: http://localhost:3000/api/comments<br />
-example body:
-```json
-{
-    "postId": "604d6a09f119973e94f2893d"
-}
+Query Params:
 ```
-Content-Type: application/json
+"postId": "604d6a09f119973e94f2893d"
+```
 
 Returns: array of post comments<br />
 Example return:
