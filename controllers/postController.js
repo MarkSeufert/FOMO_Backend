@@ -27,8 +27,8 @@ function createPost(postData) {
             name: postData.username,
             email: postData.email,
             message: filter.clean(postData.message),
-            userId: postData.id,
-            imageFile: postData.imageFile,
+            userId: postData.userId,
+            imageFile: "",
             location: {
                 type: 'Point',
                 coordinates: [ postData.long, postData.lat ]
@@ -48,8 +48,9 @@ function createPostWithImage(postData) {
         {
             name: postData.username,
             email: postData.email,
-            message: postData.message,
-            userId: postData.id,
+            message: filter.clean(postData.message),
+            userId: postData.userId,
+            imageFile: postData.imageFile,
             location: {
                 type: 'Point',
                 coordinates: [ postData.long, postData.lat ]
@@ -61,5 +62,6 @@ function createPostWithImage(postData) {
 
 module.exports = {
     getPosts,
-    createPost
+    createPost,
+    createPostWithImage
 };

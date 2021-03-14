@@ -74,7 +74,7 @@ router.post('/createPostWithImage', upload.single('image'), (req, res) => {
             }
         }
         body.imageFile = req.file.filename;
-        postController.createPost(body).then((posts) => {
+        postController.createPostWithImage(body).then((posts) => {
             res.send(posts);
         })
     }

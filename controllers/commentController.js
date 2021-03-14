@@ -51,7 +51,7 @@ function createComment(body, post){
             name: body.username,
             email: body.email,
             message: filter.clean(body.message),
-            userId: body.id,
+            userId: body.userId,
             postId: post.id,
             postLocation: post.location.coordinates,
             location: {
