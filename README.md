@@ -104,7 +104,7 @@ Example return:
             "type": "Point"
         },
         "date": "2021-03-12T23:31:46.301Z",
-        "<br />v": 0
+        "__v": 0
     },
     {
         "_id": "60471956fb5f011ca85cdcd6",
@@ -120,7 +120,7 @@ Example return:
             "type": "Point"
         },
         "date": "2021-03-09T06:44:38.342Z",
-        "<br />v": 0
+        "__v": 0
     }
 ]
 ```
@@ -183,7 +183,7 @@ Example return:
         "userId": "604d694d2825be4e18a32fb4",
         "postId": "604d6a09f119973e94f2893d",
         "date": "2021-03-14T01:44:16.762Z",
-        "<br />v": 0
+        "__v": 0
     },
     {
         "postLocation": [
@@ -197,7 +197,7 @@ Example return:
         "userId": "604d694d2825be4e18a32fb4",
         "postId": "604d6a09f119973e94f2893d",
         "date": "2021-03-14T01:47:34.494Z",
-        "<br />v": 0
+        "__v": 0
     }
 ]
 ```
