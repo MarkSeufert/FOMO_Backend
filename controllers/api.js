@@ -3,6 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const Multer = require('multer');
+const path = require('path');
 
 const userController = require('./userController')
 const commentController = require('./commentController')
@@ -22,6 +23,9 @@ const multer = Multer({
     limits: {
       fileSize: 5 * 1024 * 1024, // no larger than 5mb, can be changed as needed.
     },
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+    }
   });
 
 // A bucket is a container for objects (in our case images).
@@ -76,7 +80,7 @@ router.post('/createPostWithImage', multer.single('image'), (req, res) => {
     }
     
     // Create a new blob in the bucket and upload the image data.
-    const blob = bucket.file(req.file.originalname);
+    const blob = bucket.file(req.file.filename);
     const blobStream = blob.createWriteStream({
         resumable: false,
     });
