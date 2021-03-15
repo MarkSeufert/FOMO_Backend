@@ -2,26 +2,30 @@
 
 const express = require('express');
 const router = express.Router();
-const {Storage} = require('@google-cloud/storage');
-const cloudstorage = new Storage();
+const Multer = require('multer');
 
 const userController = require('./userController')
 const commentController = require('./commentController')
 const postController = require('./postController')
 var Promise = require("bluebird");
 
-var multer = require('multer');
-const path = require('path');
-var fs = require('fs');
-var storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, 'uploads')
+// The credentials for the cloud storage will be found inside the computer's environment variables.
+// The cloud storage functionality won't work locally unless those credentials are set up. However,
+// it will work inside of the GCP instance.
+const {Storage} = require('@google-cloud/storage');
+const cloudstorage = new Storage();
+
+// Multer is required to process file uploads and make them available via
+// req.files.
+const multer = Multer({
+    storage: Multer.memoryStorage(),
+    limits: {
+      fileSize: 5 * 1024 * 1024, // no larger than 5mb, can be changed as needed.
     },
-    filename: function (req, file, cb) {
-      cb(null, file.fieldname + '-' + Date.now() + '.png')
-    }
-  })
-var upload = multer({ storage: storage })
+  });
+
+// A bucket is a container for objects (in our case images).
+const bucket = cloudstorage.bucket('fomo-images');//(process.env.GCLOUD_STORAGE_BUCKET);
 
 // User Controller API
 
@@ -65,28 +69,42 @@ router.post('/createPost', (req, res) => {
     })
 });
 
-router.post('/createPostWithImage', upload.single('image'), (req, res) => {
+router.post('/createPostWithImage', multer.single('image'), (req, res) => {
+    if (!req.file) {
+        res.status(400).send('No file uploaded.');
+        return;
+    }
+    
+    // Create a new blob in the bucket and upload the image data.
+    const blob = bucket.file(req.file.originalname);
+    const blobStream = blob.createWriteStream({
+        resumable: false,
+    });
+
+    blobStream.on('error', err => {
+        res.status(400).send('File upload failed.')
+    });
+
+    blobStream.on('finish', () => {
+        // The public URL can be used to directly access the file via HTTP.
+        const publicUrl = format(
+            `https://storage.googleapis.com/${bucket.name}/${blob.name}`
+        );
+        res.status(200).send(publicUrl);
+    });
+
+    blobStream.end(req.file.buffer);
+    /*
     const file = req.file;
     let body = req.query;
     if (file){
-        var obj = {
-            img: {
-                data: fs.readFileSync(path.resolve(__dirname, "../uploads/" + req.file.filename)),
-                contentType: 'image/png'
-            }
-        }
-        body.imageFile = req.file.filename;
-
         // Upload the file to google cloud storage
         cloudstorage.bucket('fomo-images').upload(body.filepath);
 
         postController.createPostWithImage(body).then((posts) => {
             res.send(posts);
         })
-    }
-    // commentController.comment(req.query).then((comment) => {
-    //     res.send(comment);
-    // })
+    }*/
 });
 
 router.get('/file/:name', (req, res) => {
