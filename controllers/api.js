@@ -22,9 +22,6 @@ const multer = Multer({
     storage: Multer.memoryStorage(),
     limits: {
       fileSize: 5 * 1024 * 1024, // no larger than 5mb, can be changed as needed.
-    },
-    filename: function (req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
     }
   });
 
@@ -78,9 +75,10 @@ router.post('/createPostWithImage', multer.single('image'), (req, res) => {
         res.status(400).send('No file uploaded.');
         return;
     }
-    
+
     // Create a new blob in the bucket and upload the image data.
-    const blob = bucket.file(req.file.filename);
+    const imageName = req.file.fieldname + '-' + Date.now() + path.extname(req.file.originalname);
+    const blob = bucket.file(imageName);
     const blobStream = blob.createWriteStream({
         resumable: false,
     });
