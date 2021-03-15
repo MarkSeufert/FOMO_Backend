@@ -6,22 +6,51 @@ var Filter = require('bad-words'),
     filter = new Filter();
 
 function getPosts(locationData) {
-    let posts = postModel.find(
-        {
-          location:
-            { $near :
-               {
-                 $geometry: { type: "Point",  coordinates: [ locationData.long, locationData.lat ] },
-                 $minDistance: 0,
-                 $maxDistance: locationData.radius //in meters
-               }
+    if (locationData.long, locationData.lat) {
+        let posts = postModel.find(
+            {
+              location:
+                { $near :
+                   {
+                     $geometry: { type: "Point",  coordinates: [ locationData.long, locationData.lat ] },
+                     $minDistance: 0,
+                     $maxDistance: locationData.radius //in meters
+                   }
+                }
             }
-        }
-    );
-    return posts;
+        );
+        return posts;
+    } else {
+        let posts = postModel.find().populate('User');
+        return posts;
+    }
 }
 
 function createPost(postData) {
+    let error = "";
+    // Error check postData
+    if (!postData) 
+    {
+        error = "/createPost POST requires a body";
+    }
+    if (!postData.message)
+    {
+        error = "/createPost POST body requires 'message'";
+    }
+    if (!postData.userId)
+    {
+        error = "/createPost POST body requires 'userId'";
+    }
+    if (!postData.long || !postData.lat)
+    {
+        error = "/createPost POST body requires 'long' and 'lat'";
+    }
+    if(error){
+        return new Promise((resolve, reject) => {
+            resolve(error);
+        });
+    }
+
     let newPost = new postModel(
         {
             name: postData.username,

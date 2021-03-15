@@ -17,7 +17,10 @@ const pointSchema = new mongoose.Schema({
 });
 
 const Post = mongoose.model('Post', Schema({
-    userId: ObjectId,
+    userId: {
+      type: ObjectId,
+      ref: 'User'
+    },
     name: String,
     message: String,
     email: String,

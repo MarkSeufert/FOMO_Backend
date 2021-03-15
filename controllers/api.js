@@ -78,9 +78,6 @@ router.post('/createPostWithImage', upload.single('image'), (req, res) => {
             res.send(posts);
         })
     }
-    // commentController.comment(req.query).then((comment) => {
-    //     res.send(comment);
-    // })
 });
 
 router.get('/file/:name', (req, res) => {

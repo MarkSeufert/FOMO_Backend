@@ -9,14 +9,14 @@ var Filter = require('bad-words'),
 const Promise = require("bluebird");
 
 function getPostComments(body) {
-    return postCommentModel.find({ postId: body.postId}).then((postComments) => {
+    return postCommentModel.find({ postId: body.postId}).populate("User").then((postComments) => {
         return postComments || { error: "No comments" };
     })
 }
 
 function addPostComment(body) {
     if (body.postId) {
-        return postModel.findById(body.postId).then((post) => {
+        return postModel.findById(body.postId).populate("User").then((post) => {
             if (!post) {
                 return {error: "no such post"}
             }
@@ -33,7 +33,7 @@ function addPostComment(body) {
                    $maxDistance: 0 //in meters
                  }
               }
-          }).then((post) => {
+          }).populate("User").then((post) => {
         if (!post) {
             return {error: "no such post"}
         }

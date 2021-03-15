@@ -17,10 +17,11 @@ const pointSchema = new mongoose.Schema({
 });
 
 const postComment = mongoose.model('postComment', Schema({
-    userId: ObjectId,
-    name: String,
+    userId: {
+      type: ObjectId,
+      ref: 'User'
+    },
     message: String,
-    email: String,
     postId: ObjectId,
     postLocation: [Number],
     date: {
