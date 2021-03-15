@@ -2,6 +2,8 @@
 
 const express = require('express');
 const router = express.Router();
+const {Storage} = require('@google-cloud/storage');
+const cloudstorage = new Storage();
 
 const userController = require('./userController')
 const commentController = require('./commentController')
@@ -74,6 +76,10 @@ router.post('/createPostWithImage', upload.single('image'), (req, res) => {
             }
         }
         body.imageFile = req.file.filename;
+
+        // Upload the file to google cloud storage
+        cloudstorage.bucket('fomo-images').upload(body.filepath);
+
         postController.createPostWithImage(body).then((posts) => {
             res.send(posts);
         })
