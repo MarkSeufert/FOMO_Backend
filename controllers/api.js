@@ -87,9 +87,8 @@ router.post('/createPostWithImage', multer.single('image'), (req, res) => {
 
     blobStream.on('finish', () => {
         // The public URL can be used to directly access the file via HTTP.
-        const publicUrl = format(
-            `https://storage.googleapis.com/${bucket.name}/${blob.name}`
-        );
+        const publicUrl = "https://storage.googleapis.com/" + bucket.name + "/" + blob.name;
+        console.log(`image uploaded to url: ${publicUrl}`);
         res.status(200).send(publicUrl);
     });
 
