@@ -89,21 +89,15 @@ router.post('/createPostWithImage', multer.single('image'), (req, res) => {
         // The public URL can be used to directly access the file via HTTP.
         const publicUrl = "https://storage.googleapis.com/" + bucket.name + "/" + blob.name;
         console.log(`image uploaded to url: ${publicUrl}`);
-        res.status(200).send(publicUrl);
+
+        let body = req.query;
+        body.imageUrl = publicUrl;
+        postController.createPostWithImage(body).then((posts) => {
+            res.send(posts);
+        });
     });
 
     blobStream.end(req.file.buffer);
-    /*
-    const file = req.file;
-    let body = req.query;
-    if (file){
-        // Upload the file to google cloud storage
-        cloudstorage.bucket('fomo-images').upload(body.filepath);
-
-        postController.createPostWithImage(body).then((posts) => {
-            res.send(posts);
-        })
-    }*/
 });
 
 router.get('/file/:name', (req, res) => {

@@ -50,7 +50,7 @@ function createPostWithImage(postData) {
             email: postData.email,
             message: filter.clean(postData.message),
             userId: postData.userId,
-            imageFile: "",
+            imageFile: postData.imageUrl,
             location: {
                 type: 'Point',
                 coordinates: [ postData.long, postData.lat ]
