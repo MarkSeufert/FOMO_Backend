@@ -10,7 +10,14 @@ const Promise = require("bluebird");
 
 function getPostComments(body) {
     return postCommentModel.find({ postId: body.postId}).populate("User").then((postComments) => {
-        return postComments || { error: "No comments" };
+        return postComments.map((comment) => {
+            let ret = comment.toJSON();
+            ret.postLocation = {
+                long: ret.postLocation[0],
+                lat: ret.postLocation[1]
+            }
+            return ret;
+        }) || { error: "No comments" };
     })
 }
 

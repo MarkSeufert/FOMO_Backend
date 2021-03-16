@@ -6,8 +6,8 @@ var Filter = require('bad-words'),
     filter = new Filter();
 
 function getPosts(locationData) {
-    if (locationData.long, locationData.lat) {
-        let posts = postModel.find(
+    if (locationData.long && locationData.lat) {
+        return postModel.find(
             {
               location:
                 { $near :
@@ -18,12 +18,18 @@ function getPosts(locationData) {
                    }
                 }
             }
-        );
-        return posts;
-    } else {
-        let posts = postModel.find().populate('User');
-        return posts;
+        ).then(res => {
+            return res.map((post) => {
+                let ret = post.toJSON();
+                ret.location = {
+                    long: post.location.coordinates[0],
+                    lat: post.location.coordinates[1]
+                }
+                return ret;
+            });
+        })
     }
+    return [];
 }
 
 function createPost(postData) {
