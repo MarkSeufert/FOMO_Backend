@@ -32,6 +32,10 @@ function getPosts(locationData) {
     return [];
 }
 
+function getAllPosts() {
+    return postModel.find({});
+}
+
 function createPost(postData) {
     let error = "";
     // Error check postData
@@ -97,6 +101,7 @@ function createPostWithImage(postData) {
 
 module.exports = {
     getPosts,
+    getAllPosts,
     createPost,
-    createPostWithImage
+    createPostWithImage,
 };

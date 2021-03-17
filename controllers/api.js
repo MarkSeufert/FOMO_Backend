@@ -64,6 +64,12 @@ router.get('/posts', (req, res) => {
     })
 });
 
+router.get('/allPosts', (req, res) => {
+    postController.getAllPosts().then((posts) => {
+        res.send(posts);
+    })
+});
+
 router.post('/createPost', (req, res) => {
     postController.createPost(req.body).then((posts) => {
         res.send(posts);
