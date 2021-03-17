@@ -108,24 +108,4 @@ router.post('/createPostWithImage', multer.single('image'), (req, res) => {
     blobStream.end(req.file.buffer);
 });
 
-router.get('/file/:name', (req, res) => {
-    var options = {
-        root: path.resolve(__dirname, "../uploads/"),
-        dotfiles: 'deny',
-        headers: {
-          'x-timestamp': Date.now(),
-          'x-sent': true
-        }
-    }
-    var fileName = req.params.name;
-    //res.send(fileName);
-    res.sendFile(fileName, options, function (err) {
-        if (err) {
-            //next(err)
-        } else {
-            console.log('Sent:', fileName)
-        }
-    })
-});
-
 module.exports = router;

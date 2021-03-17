@@ -17,13 +17,11 @@ const pointSchema = new mongoose.Schema({
 });
 
 const Post = mongoose.model('Post', Schema({
-    userId: {
+    user: {
       type: ObjectId,
       ref: 'User'
     },
-    name: String,
     message: String,
-    email: String,
     imageFile: String,
     location: pointSchema,
     date: {

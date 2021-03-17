@@ -17,19 +17,18 @@ const pointSchema = new mongoose.Schema({
 });
 
 const postComment = mongoose.model('postComment', Schema({
-    userId: {
-      type: ObjectId,
-      ref: 'User'
-    },
-    message: String,
-    postId: ObjectId,
-    postLocation: [Number],
-    date: {
-        type: Date,
-        default: Date.now
-    }
+  user: {
+    type: ObjectId,
+    ref: 'User'
+  },
+  message: String,
+  postId: ObjectId,
+  location: pointSchema,
+  date: {
+      type: Date,
+      default: Date.now
+  }
 }));
-
 
 
 module.exports = postComment

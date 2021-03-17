@@ -18,7 +18,7 @@ function getPosts(locationData) {
                    }
                 }
             }
-        ).then(res => {
+        ).populate('user').then(res => {
             return res.map((post) => {
                 let ret = post.toJSON();
                 ret.location = {
@@ -33,7 +33,7 @@ function getPosts(locationData) {
 }
 
 function getAllPosts() {
-    return postModel.find({});
+    return postModel.find({}).populate('user');
 }
 
 function createPost(postData) {
@@ -63,10 +63,8 @@ function createPost(postData) {
 
     let newPost = new postModel(
         {
-            name: postData.username,
-            email: postData.email,
             message: filter.clean(postData.message),
-            userId: postData.userId,
+            user: postData.userId,
             imageFile: "",
             location: {
                 type: 'Point',
@@ -74,29 +72,40 @@ function createPost(postData) {
               }
         }
     );
-    return newPost.save();
-
-    // Create the new post and save it to mongoDB
-    // let newPost = new postModel();
-    // const returnedPost = await newPost.save();
-    // return returnedPost;
+    return newPost.save().then((savedPost) => {
+        return savedPost.populate('user').execPopulate().then(post => {
+            let ret = post.toJSON();
+            ret.location = {
+                long: post.location.coordinates[0],
+                lat: post.location.coordinates[1]
+            }
+            return ret;
+        })
+    });
 }
 
 function createPostWithImage(postData) {
     let newPost = new postModel(
         {
-            name: postData.username,
-            email: postData.email,
             message: filter.clean(postData.message),
-            userId: postData.userId,
+            user: postData.userId,
             imageFile: postData.imageUrl,
             location: {
                 type: 'Point',
                 coordinates: [ postData.long, postData.lat ]
-              }
+            }
         }
     );
-    return newPost.save();
+    return newPost.save().then((savedPost) => {
+        return savedPost.populate('user').execPopulate().then(post => {
+            let ret = post.toJSON();
+            ret.location = {
+                long: post.location.coordinates[0],
+                lat: post.location.coordinates[1]
+            }
+            return ret;
+        })
+    });
 }
 
 module.exports = {

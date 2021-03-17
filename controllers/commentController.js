@@ -9,12 +9,12 @@ var Filter = require('bad-words'),
 const Promise = require("bluebird");
 
 function getPostComments(body) {
-    return postCommentModel.find({ postId: body.postId}).populate("User").then((postComments) => {
+    return postCommentModel.find({ postId: body.postId}).populate("user").then((postComments) => {
         return postComments.map((comment) => {
             let ret = comment.toJSON();
-            ret.postLocation = {
-                long: ret.postLocation[0],
-                lat: ret.postLocation[1]
+            ret.location = {
+                long: ret.location.coordinates[0],
+                lat: ret.location.coordinates[1]
             }
             return ret;
         }) || { error: "No comments" };
@@ -23,7 +23,7 @@ function getPostComments(body) {
 
 function addPostComment(body) {
     if (body.postId) {
-        return postModel.findById(body.postId).populate("User").then((post) => {
+        return postModel.findById(body.postId).populate("user").then((post) => {
             if (!post) {
                 return {error: "no such post"}
             }
@@ -40,7 +40,7 @@ function addPostComment(body) {
                    $maxDistance: 0 //in meters
                  }
               }
-          }).populate("User").then((post) => {
+          }).populate("user").then((post) => {
         if (!post) {
             return {error: "no such post"}
         }
@@ -55,19 +55,25 @@ function addPostComment(body) {
 function createComment(body, post){
     let newPostComment = new postCommentModel(
         {
-            name: body.username,
-            email: body.email,
             message: filter.clean(body.message),
-            userId: body.userId,
+            user: body.userId,
             postId: post.id,
-            postLocation: post.location.coordinates,
             location: {
                 type: 'Point',
-                coordinates: [ body.long, body.lat ]
-              }
+                coordinates: post.location.coordinates
+            }
         }
     );
-    return newPostComment.save();
+    return newPostComment.save().then((savedComment) => {
+        return savedComment.populate('user').execPopulate().then(comment => {
+            let ret = comment.toJSON();
+            ret.location = {
+                long: comment.location.coordinates[0],
+                lat: comment.location.coordinates[1]
+            }
+            return ret;
+        })
+    });
 }
 
 module.exports = {
