@@ -66,6 +66,7 @@ function createPost(postData) {
     let newPost = new postModel(
         {
             message: filter.clean(postData.message),
+            messageType: postData.messageType,
             user: postData.userId,
             imageFile: "",
             location: {
@@ -90,6 +91,7 @@ function createPostWithImage(postData) {
     let newPost = new postModel(
         {
             message: filter.clean(postData.message),
+            messageType: postData.messageType,
             user: postData.userId,
             imageFile: postData.imageUrl,
             location: {

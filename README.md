@@ -39,6 +39,7 @@ example body:
 ```json
 {
     "message": "My message",
+    "messageType": "regular message",
     "userId": "6052927f3205ca3c40f08ca8",
     "long": 40,
     "lat": 55
@@ -56,8 +57,9 @@ example endpoint: http://localhost:3000/api/createPostWithImage?message=This mes
 
 Query Params:
 ```
-"message": "This message will have an image!",
-"userId": "605292e2e0c0d12d604c588e",
+"message": "This message will have an image!"
+"messageType": "ad"
+"userId": "605292e2e0c0d12d604c588e"
 "long": 40,
 "lat": 55
 ```
@@ -85,6 +87,7 @@ Example return:
     {
         "_id": "605292b0e0c0d12d604c588c",
         "message": "My message",
+        "messageType": "ad",
         "user": {
             "_id": "6052927f3205ca3c40f08ca8",
             "email": "email@hotmail.com",
@@ -103,6 +106,7 @@ Example return:
     {
         "_id": "605292f7e0c0d12d604c588f",
         "message": "Another user's message",
+        "messageType": "ad",
         "user": {
             "_id": "605292e2e0c0d12d604c588e",
             "email": "email2@hotmail.com",
@@ -138,6 +142,7 @@ Example return:
     {
         "_id": "605292b0e0c0d12d604c588c",
         "message": "My message",
+        "messageType": "ad",
         "user": {
             "_id": "6052927f3205ca3c40f08ca8",
             "email": "email@hotmail.com",
@@ -156,6 +161,7 @@ Example return:
     {
         "_id": "605292f7e0c0d12d604c588f",
         "message": "Another user's message",
+        "messageType": "ad",
         "user": {
             "_id": "605292e2e0c0d12d604c588e",
             "email": "email2@hotmail.com",

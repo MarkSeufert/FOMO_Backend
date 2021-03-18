@@ -22,6 +22,7 @@ const Post = mongoose.model('Post', Schema({
       ref: 'User'
     },
     message: String,
+    messageType: String,
     imageFile: String,
     location: pointSchema,
     date: {
