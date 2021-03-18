@@ -69,12 +69,13 @@ Content-Type: multipart/form-data
 ------------------------------------------------------------------------------------------
 
 GET posts<br />
-example endpoint: http://localhost:3000/api/posts<br />
+example endpoint: http://localhost:3000/api/posts?radius=50&long=40.0&lat=55.0&expiry=24<br />
 Query Params:
 ```
 "radius": 50, // in meters
 "long": 40.0,
 "lat": 55.0
+"expiry": 24 // in hours - OPTIONAL 
 ```
 
 Returns: array of posts<br />
@@ -124,7 +125,11 @@ Example return:
 ------------------------------------------------------------------------------------------
 
 GET allPosts<br />
-example endpoint: http://localhost:3000/api/allPosts<br />
+example endpoint: http://localhost:3000/api/allPosts?expiry=24<br />
+Query Params:
+```
+"expiry": 24 // in hours - OPTIONAL 
+```
 
 Returns: array of posts<br />
 Example return:

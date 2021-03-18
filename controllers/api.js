@@ -65,7 +65,7 @@ router.get('/posts', (req, res) => {
 });
 
 router.get('/allPosts', (req, res) => {
-    postController.getAllPosts().then((posts) => {
+    postController.getAllPosts(req.query).then((posts) => {
         res.send(posts);
     })
 });

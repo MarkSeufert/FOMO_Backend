@@ -9,13 +9,15 @@ function getPosts(locationData) {
     if (locationData.long && locationData.lat) {
         return postModel.find(
             {
-              location:
-                { $near :
-                   {
-                     $geometry: { type: "Point",  coordinates: [ locationData.long, locationData.lat ] },
-                     $minDistance: 0,
-                     $maxDistance: locationData.radius //in meters
-                   }
+                location: {
+                    $near : {
+                        $geometry: { type: "Point",  coordinates: [ locationData.long, locationData.lat ] },
+                        $minDistance: 0,
+                        $maxDistance: locationData.radius //in meters
+                    }
+                },
+                date: {
+                    $gte: new Date(new Date() - 1000*60*60*(locationData.expiry || 7*24))
                 }
             }
         ).populate('user').then(res => {
@@ -32,8 +34,12 @@ function getPosts(locationData) {
     return [];
 }
 
-function getAllPosts() {
-    return postModel.find({}).populate('user');
+function getAllPosts(body) {
+    return postModel.find({
+        date: {
+            $gte: new Date(new Date() - 1000*60*60*(body.expiry || 7*24))
+        }
+    }).populate('user');
 }
 
 function createPost(postData) {
@@ -46,10 +52,6 @@ function createPost(postData) {
     if (!postData.message)
     {
         error = "/createPost POST body requires 'message'";
-    }
-    if (!postData.userId)
-    {
-        error = "/createPost POST body requires 'userId'";
     }
     if (!postData.long || !postData.lat)
     {
