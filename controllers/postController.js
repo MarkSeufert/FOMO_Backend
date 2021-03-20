@@ -39,7 +39,16 @@ function getAllPosts(body) {
         date: {
             $gte: new Date(new Date() - 1000*60*60*(body.expiry || 7*24))
         }
-    }).populate('user');
+    }).populate('user').then(res => {
+        return res.map((post) => {
+            let ret = post.toJSON();
+            ret.location = {
+                long: post.location.coordinates[0],
+                lat: post.location.coordinates[1]
+            }
+            return ret;
+        });
+    })
 }
 
 function createPost(postData) {
