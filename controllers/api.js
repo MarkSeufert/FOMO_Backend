@@ -106,9 +106,16 @@ router.post('/createPostWithImage', multer.single('image'), (req, res) => {
                 Jimp.read(img_buf, (err, image) => {
                     if (err) throw err;
                     image.blur( 70 );
-                    req.file.buffer = image.bitmap.data;
-                    console.log("Image blurred");
-                    return resolve(req.file);
+                    image.getBase64(Jimp.AUTO, function(err, data) {  // Add err
+                        console.log("Image blurred");
+
+                        const im = data.split(",")[1];
+                        const img = Buffer.from(im, 'base64');
+   
+                        req.file.buffer = img; 
+                        req.file.length = img.length;
+                        return resolve(req.file);
+                    });
                 });
             });
         }
